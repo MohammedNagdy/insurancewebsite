@@ -1,1 +1,1 @@
-web: gunicorn insucom.wsgi --log-file -
+web: gunicorn insuCom.wsgi --log-file -

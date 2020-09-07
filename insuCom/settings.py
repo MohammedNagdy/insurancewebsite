@@ -165,3 +165,5 @@ LOGOUT_REDIRECT_URL = "/"
 # the date format for the purchases and everything
 DATE_INPUT_FORMATS = ('%d-%m-%Y','%Y-%m-%d')
 
+import django_heroku
+django_heroku.settings(locals())
