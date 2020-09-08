@@ -24,7 +24,7 @@ from user import urls, views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.home_view),
+    path('', views.home_view, name='home'),
     path('insurance/', include('professionalindemnity.urls')),
     path('insurance/', include('healthinsurance.urls')),
     path('insurance/', include('carinsurance.urls')),
