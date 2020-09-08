@@ -1,33 +1,30 @@
 from django.shortcuts import render
-from .forms import PropertyInsuranceForm
+# from .forms import PropertyInsuranceForm
 from .models import PropertyInsurance
 
 
 # Create your views here.
 
+from formtools.wizard.views import SessionWizardView
 
-def get_prop_insu(request):
-	template = 'propinsu.html'
-	form = PropertyInsuranceForm(request.POST)
+# Create your views here.
 
-	if request.method == 'POST':
-		if form.is_valid():
-			obj = PropertyInsurance()
-			obj.first_name = form.cleaned_data.get('first_name')
-			obj.last_name = form.cleaned_data.get('last_name')
-			obj.phone = form.cleaned_data.get('phone')
-			obj.email = form.cleaned_data.get('email')
-			obj.house_type = form.cleaned_data.get('house_type')
-			obj.house_insurance = form.cleaned_data.get('house_insurance')
-			obj.buildings_value = form.cleaned_data.get('buildings_value')
-			obj.contents_value = form.cleaned_data.get('contents_value')
-			obj.personal_belongings_value = form.cleaned_data.get('personal_belongings_value')
+class PropertyInsuranceView(SessionWizardView):
+	template_name = 'propinsu.html'
 
-			obj.save()
 
-	context = {
-		'form':form,
-	}
+	def done(self, form_list, **kwargs):
+		form_data = process_form_data(form_list)
+		obj = CarInsurance()
+		obj = form_data
+		obj.save()
+		return render(request,'success.html', {'form_data':form_data})
 
-	return render(request, template, context)
+
+
+def process_form_data(form_list):
+	form_data = [form.cleaned_data for form in form_list]
+	return form_data
+
+
 

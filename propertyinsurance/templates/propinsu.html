@@ -5,17 +5,19 @@
 {% block content %}
 
 <style type="text/css">
-	.c-container {
-		margin-top: 200px;
-	}
+  .c-container {
+    margin-top: 200px;
+  }
 </style>
 <!-- Main content -->
     <div class="c-container">
       <div class="header-body text-center mb-7">
         <div class="row justify-content-center">
           <div class="col-xl-5 col-lg-6 col-md-8 px-5">
-            <h1 class="text-black">Send us your information</h1>
-            <p class="text-lead text-black">You will contacted with one of our specialists</p>
+            <p class="text-lead text-black">{{ wizard.steps.step1 }} of {{ wizard.steps.count }}</p>
+            {% for field in form %}
+              {{field.error}}
+            {% endfor %}
           </div>
         </div>
       </div>
@@ -26,27 +28,43 @@
     <!-- Table -->
     <div class="row justify-content-center">
       <div class="col-lg-6 col-md-8">
-        <div class="card bg-light border-0">
-          <div class="card-header bg-light pb-5">
-            <div class="text-muted text-center mt-2 mb-4"><small>Get Qoutes</small></div>
-            <div class="text-center">
-          </div>
-          <div class="card-body px-lg-5 py-lg-5">
+        
             <form role="form" class="form-group" action="" method="POST">{% csrf_token %}
               <div class="form-group">
                 <div class="input-group input-group-merge input-group-alternative mb-3">
+                  {{ wizard.management_form }}
+                  {% if wizard.form.forms %}
+                  {{ wizard.form.management_form }}
+                  {% for form in wizard.form.forms %}
                   <div>
-                  {{form | crispy}}
+                     
+                      {{form.as_table | crispy}}
                   </div>
+                  {% endfor %}
+                  {% else %}
+                  {{wizard.form}}
+                  {% endif %}
+
                 </div>
               </div>
 
                   <div class="text-center">
+                    {% if wizard.steps.prev %}
+                    <button type="submit" class="btn btn-secondary mt-4" value="{{ wizard.steps.first }}">First Step</button>
+                    <button type="submit" class="btn btn-secondary mt-4" value="{{ wizard.steps.prev }}">Previous Step</button>
+
+                    {% elif wizard.steps.next %}
+
+                    <button type="submit" class="btn btn-secondary mt-4" value="{{ wizard.steps.next }}">Next Step</button>
+
+                    {% elif not wizard.steps.next %}
+
                     <button type="submit" class="btn btn-primary mt-4">Get Qoutes</button>
+                    {% endif %}
+
+                    
                   </div>
                   </form>
                 </div>
           </div>
-        </div>
-      </div>
 {% endblock %}

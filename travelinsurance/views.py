@@ -1,31 +1,27 @@
 from django.shortcuts import render
-from .forms import TravelInsuranceForm
+# from .forms import TravelInsuranceForm
 from .models import TravelInsurance
 
 
+
+from formtools.wizard.views import SessionWizardView
+
 # Create your views here.
 
+class TravelInsuranceView(SessionWizardView):
+	template_name = 'propinsu.html'
 
-def get_travel_insu(request):
-	template = 'travelinsu.html'
-	form = TravelInsuranceForm(request.POST)
 
-	if request.method == 'POST':
-		if form.is_valid():
-			obj = TravelInsurance()
-			obj.first_name = form.cleaned_data.get('first_name')
-			obj.last_name = form.cleaned_data.get('last_name')
-			obj.phone = form.cleaned_data.get('phone')
-			obj.email = form.cleaned_data.get('email')
-			obj.insurance_type = form.cleaned_data.get('insurance_type')
-			obj.insurance_start_date = form.cleaned_data.get('insurance_start_date')
-			obj.insurance_end_date = form.cleaned_data.get('insurance_end_date')
-			obj.country = form.cleaned_data.get('country_destination')
-			obj.save()
+	def done(self, form_list, **kwargs):
+		form_data = process_form_data(form_list)
+		obj = CarInsurance()
+		obj = form_data
+		obj.save()
+		return render(request,'success.html', {'form_data':form_data})
 
-	context = {
-		'form':form,
-	}
 
-	return render(request, template, context)
+
+def process_form_data(form_list):
+	form_data = [form.cleaned_data for form in form_list]
+	return form_data
 

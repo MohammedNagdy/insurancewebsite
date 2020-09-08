@@ -38,7 +38,7 @@
                   {% for form in wizard.form.forms %}
                   <div>
                      
-                      {{form | crispy}}
+                      {{form.as_table | crispy}}
                   </div>
                   {% endfor %}
                   {% else %}
