@@ -18,12 +18,23 @@ from django.urls import path, include
 from django.conf.urls.static import static
 from django.conf import settings
 from user import urls, views
+# import professionalindemnity.urls 
 
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.home_view),
+    path('insurance/', include('professionalindemnity.urls')),
+    path('insurance/', include('healthinsurance.urls')),
+    path('insurance/', include('carinsurance.urls')),
+    path('insurance/', include('propertyinsurance.urls')),
+    path('insurance/', include('insurancepli.urls')),
+    path('insurance/', include('travelinsurance.urls')),
+
+
+
+
 ]
 
 if settings.DEBUG:
