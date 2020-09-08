@@ -14,8 +14,10 @@
       <div class="header-body text-center mb-7">
         <div class="row justify-content-center">
           <div class="col-xl-5 col-lg-6 col-md-8 px-5">
-            <h1 class="text-black">Send us your information</h1>
-            <p class="text-lead text-black">You will contacted with one of our specialists</p>
+            <p class="text-lead text-black">{{ wizard.steps.step1 }} of {{ wizard.steps.count }}</p>
+            {% for field in form %}
+              {{field.error}}
+            {% endfor %}
           </div>
         </div>
       </div>
@@ -30,14 +32,37 @@
             <form role="form" class="form-group" action="" method="POST">{% csrf_token %}
               <div class="form-group">
                 <div class="input-group input-group-merge input-group-alternative mb-3">
+                  {{ wizard.management_form }}
+                  {% if wizard.form.forms %}
+                  {{ wizard.form.management_form }}
+                  {% for form in wizard.form.forms %}
                   <div>
-                  {{form | crispy}}
+                     
+                      {{form | crispy}}
                   </div>
+                  {% endfor %}
+                  {% else %}
+                  {{wizard.form}}
+                  {% endif %}
+
                 </div>
               </div>
 
                   <div class="text-center">
+                    {% if wizard.steps.prev %}
+                    <button type="submit" class="btn btn-secondary mt-4" value="{{ wizard.steps.first }}">First Step</button>
+                    <button type="submit" class="btn btn-secondary mt-4" value="{{ wizard.steps.prev }}">Previous Step</button>
+
+                    {% elif wizard.steps.next %}
+
+                    <button type="submit" class="btn btn-secondary mt-4" value="{{ wizard.steps.next }}">Next Step</button>
+
+                    {% elif not wizard.steps.next %}
+
                     <button type="submit" class="btn btn-primary mt-4">Get Qoutes</button>
+                    {% endif %}
+
+                    
                   </div>
                   </form>
                 </div>
